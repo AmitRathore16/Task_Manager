@@ -30,15 +30,19 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
       home: authState.when(
-        data: (state) {
-          final session = state.session;
+        data: (_) {
+          final session = Supabase.instance.client.auth.currentSession;
+
           if (session != null) {
             return const DashboardScreen();
           }
           return const SplashScreen();
         },
+
         loading: () => const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         ),
