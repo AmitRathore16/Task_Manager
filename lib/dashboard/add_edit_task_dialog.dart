@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:task_manager/utils/toast_utils.dart';
+import 'package:task_manager/utils/validators.dart';
 import '../app/theme.dart';
 import '../providers/task_provider.dart';
 import 'task_model.dart';
@@ -30,10 +32,9 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
   }
 
   Future<void> _submit() async {
-    if (_controller.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a task title')),
-      );
+    final validation = Validators.validateTaskTitle(_controller.text);
+    if (validation != null) {
+      ToastUtils.showError(context, validation);
       return;
     }
 
@@ -45,25 +46,21 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
       if (widget.task == null) {
         // Add new task
         await taskOps.addTask(_controller.text);
+        if (mounted) {
+          Navigator.of(context).pop();
+          ToastUtils.showSuccess(context, 'Task added successfully!');
+        }
       } else {
         // Edit existing task
         await taskOps.editTask(widget.task!.id, _controller.text);
+        if (mounted) {
+          Navigator.of(context).pop();
+          ToastUtils.showSuccess(context, 'Task updated successfully!');
+        }
       }
-
+    }  catch (e) {
       if (mounted) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(widget.task == null ? 'Task added!' : 'Task updated!'),
-            backgroundColor: AppTheme.primaryGold,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+        ToastUtils.showError(context, 'Error: ${e.toString()}');
       }
     } finally {
       if (mounted) {

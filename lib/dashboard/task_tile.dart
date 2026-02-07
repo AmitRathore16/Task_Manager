@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/providers/task_provider.dart';
+import 'package:task_manager/utils/toast_utils.dart';
 import '../app/theme.dart';
 import 'task_model.dart';
 import 'add_edit_task_dialog.dart';
@@ -66,20 +67,15 @@ class TaskTile extends ConsumerWidget {
           try {
             await taskOps.deleteTask(task.id);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Task deleted'),
-                duration: Duration(seconds: 2),
-              ),
-            );
+            if (context.mounted) {
+              ToastUtils.showSuccess(context, 'Task deleted successfully');
+            }
 
             return true; // allow animation
           } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error deleting task: $e'),
-              ),
-            );
+            if (context.mounted) {
+              ToastUtils.showError(context, 'Error deleting task: ${e.toString()}');
+            }
             return false;
           }
         }
@@ -105,10 +101,16 @@ class TaskTile extends ConsumerWidget {
               onTap: () async {
                 try {
                   await taskOps.toggleTaskCompletion(task);
+                  if (context.mounted) {
+                    ToastUtils.showSuccess(
+                      context,
+                      task.isCompleted ? 'Task marked as pending' : 'Task completed!',
+                    );
+                  }
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e')),
-                  );
+                  if (context.mounted) {
+                    ToastUtils.showError(context, 'Error: ${e.toString()}');
+                  }
                 }
               },
               borderRadius: BorderRadius.circular(6),
