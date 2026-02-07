@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_manager/app/theme_provider.dart';
-import 'package:task_manager/splash_screen.dart';
+import 'package:task_manager/dashboard/dashboard_screen.dart';
+import 'package:task_manager/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app/theme.dart';
-import 'dashboard/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
