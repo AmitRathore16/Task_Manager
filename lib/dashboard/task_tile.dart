@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/providers/task_provider.dart';
 import 'package:task_manager/utils/toast_utils.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
 import 'task_model.dart';
 import 'add_edit_task_dialog.dart';
@@ -96,8 +97,10 @@ class TaskTile extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            /// Checkbox
-            InkWell(
+            /// Animated Checkbox
+            _AnimatedCheckbox(
+              isCompleted: task.isCompleted,
+              isDark: isDark,
               onTap: () async {
                 try {
                   await taskOps.toggleTaskCompletion(task);
@@ -113,32 +116,6 @@ class TaskTile extends ConsumerWidget {
                   }
                 }
               },
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: task.isCompleted
-                      ? AppTheme.secondaryGold
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: task.isCompleted
-                        ? AppTheme.secondaryGold
-                        : (isDark
-                        ? AppTheme.textMutedGray
-                        : const Color(0xFFCCCCCC)),
-                    width: 2,
-                  ),
-                ),
-                child: task.isCompleted
-                    ? const Icon(
-                  Icons.check,
-                  size: 16,
-                  color: AppTheme.pureBlack,
-                )
-                    : null,
-              ),
             ),
 
             const SizedBox(width: 12),
@@ -162,21 +139,166 @@ class TaskTile extends ConsumerWidget {
               ),
             ),
 
-            /// Edit Button
-            IconButton(
+            /// Animated Edit Button
+            _AnimatedEditButton(
+              isDark: isDark,
               onPressed: () {
                 showAddEditTaskDialog(context, task: task);
               },
-              icon: Icon(
-                Icons.edit_outlined,
-                size: 20,
-                color: isDark
-                    ? AppTheme.textLightGray
-                    : const Color(0xFF666666),
-              ),
-              tooltip: 'Edit task',
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// Animated Checkbox with completion animation
+class _AnimatedCheckbox extends StatefulWidget {
+  final bool isCompleted;
+  final bool isDark;
+  final VoidCallback onTap;
+
+  const _AnimatedCheckbox({
+    required this.isCompleted,
+    required this.isDark,
+    required this.onTap,
+  });
+
+  @override
+  State<_AnimatedCheckbox> createState() => _AnimatedCheckboxState();
+}
+
+class _AnimatedCheckboxState extends State<_AnimatedCheckbox> with SingleTickerProviderStateMixin {
+  bool _isPressed = false;
+  late AnimationController _checkController;
+  late Animation<double> _checkAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _checkAnimation = CurvedAnimation(
+      parent: _checkController,
+      curve: Curves.elasticOut,
+    );
+    if (widget.isCompleted) {
+      _checkController.value = 1.0;
+    }
+  }
+
+  @override
+  void didUpdateWidget(_AnimatedCheckbox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isCompleted != widget.isCompleted) {
+      if (widget.isCompleted) {
+        _checkController.forward();
+      } else {
+        _checkController.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _checkController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onTap();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.85 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        child: InkWell(
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(6),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: widget.isCompleted
+                  ? AppTheme.secondaryGold
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                color: widget.isCompleted
+                    ? AppTheme.secondaryGold
+                    : (widget.isDark
+                    ? AppTheme.textMutedGray
+                    : const Color(0xFFCCCCCC)),
+                width: 2,
+              ),
+            ),
+            child: ScaleTransition(
+              scale: _checkAnimation,
+              child: widget.isCompleted
+                  ? const Icon(
+                Icons.check,
+                size: 16,
+                color: AppTheme.pureBlack,
+              )
+                  : null,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Animated Edit Button
+class _AnimatedEditButton extends StatefulWidget {
+  final bool isDark;
+  final VoidCallback onPressed;
+
+  const _AnimatedEditButton({
+    required this.isDark,
+    required this.onPressed,
+  });
+
+  @override
+  State<_AnimatedEditButton> createState() => _AnimatedEditButtonState();
+}
+
+class _AnimatedEditButtonState extends State<_AnimatedEditButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onPressed();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.85 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        child: IconButton(
+          onPressed: widget.onPressed,
+          icon: Icon(
+            Icons.edit_outlined,
+            size: 20,
+            color: widget.isDark
+                ? AppTheme.textLightGray
+                : const Color(0xFF666666),
+          ),
+          tooltip: 'Edit task',
         ),
       ),
     );

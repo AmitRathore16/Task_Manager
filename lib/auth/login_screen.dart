@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_manager/dashboard/dashboard_screen.dart';
 import 'package:task_manager/utils/toast_utils.dart';
 import 'package:task_manager/utils/validators.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
 import 'auth_service.dart';
 import 'signup_screen.dart';
@@ -48,8 +49,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ToastUtils.showSuccess(context, 'Login successful!');
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (_) => const DashboardScreen(),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => const DashboardScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: const Duration(milliseconds: 300),
           ),
         );
       }
@@ -86,31 +91,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(height: size.height * 0.06),
 
                 // Logo placeholder - user will replace with actual image
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(isDark ? 0.05 : 0.5),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.task_alt,
-                      color: AppTheme.primaryGold,
-                      size: 48,
-                    ),
-                  ),
-                ),
+                Image.asset(
+                  'assets/logo.png',
+                  width: 85,
+                  height: 85,
+                  fit: BoxFit.contain,
+                ).animate().fadeIn(duration: 500.ms).scale(delay: 100.ms),
 
-                const SizedBox(height: 16),
 
-                // DayTask title
-                Text(
-                  "DayTask",
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontSize: 24,
-                  ),
-                ),
 
                 const SizedBox(height: 40),
 
@@ -118,7 +106,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Text(
                   "Welcome Back!",
                   style: theme.textTheme.headlineMedium,
-                ),
+                ).animate().fadeIn(delay: 300.ms, duration: 400.ms).slideY(begin: 0.2, end: 0),
 
                 const SizedBox(height: 40),
 
@@ -131,7 +119,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       color: isDark ? AppTheme.textLightGray : const Color(0xFF666666),
                     ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 400.ms),
                 const SizedBox(height: 8),
 
                 // Email input field with icon
@@ -149,7 +137,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       color: isDark ? AppTheme.textLightGray : const Color(0xFF999999),
                     ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 450.ms).slideX(begin: -0.1, end: 0),
 
                 const SizedBox(height: 24),
 
@@ -162,7 +150,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       color: isDark ? AppTheme.textLightGray : const Color(0xFF666666),
                     ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 500.ms),
                 const SizedBox(height: 8),
 
                 // Password input field with icon and visibility toggle
@@ -179,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Icons.lock_outline,
                       color: isDark ? AppTheme.textLightGray : const Color(0xFF999999),
                     ),
-                    suffixIcon: IconButton(
+                    suffixIcon: _AnimatedIconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                         color: isDark ? AppTheme.textLightGray : const Color(0xFF999999),
@@ -191,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       },
                     ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 550.ms).slideX(begin: -0.1, end: 0),
 
                 const SizedBox(height: 16),
 
@@ -212,30 +200,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 600.ms),
 
                 const SizedBox(height: 24),
 
 
-                // Log In button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _loading ? null : _login,
-                    child: _loading
-                        ? SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppTheme.pureBlack,
+                // Log In button with animation
+                _AnimatedButton(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _loading ? null : _login,
+                      child: _loading
+                          ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppTheme.pureBlack,
+                          ),
                         ),
-                      ),
-                    )
-                        : const Text("Log In"),
+                      )
+                          : const Text("Log In"),
+                    ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 650.ms).slideY(begin: 0.2, end: 0),
 
                 const SizedBox(height: 32),
 
@@ -264,37 +254,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                   ],
-                ),
+                ).animate().fadeIn(delay: 700.ms),
 
                 const SizedBox(height: 32),
 
                 // Google sign-in button
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      // TODO: Implement Google sign-in
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Google icon placeholder
-                        Icon(
-                          Icons.g_mobiledata,
-                          size: 28,
-                          color: isDark ? AppTheme.textWhite : AppTheme.pureBlack,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          "Google",
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w500,
+                _AnimatedButton(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        // TODO: Implement Google sign-in
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Google icon placeholder
+                          Icon(
+                            Icons.g_mobiledata,
+                            size: 28,
+                            color: isDark ? AppTheme.textWhite : AppTheme.pureBlack,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 12),
+                          Text(
+                            "Google",
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                ).animate().fadeIn(delay: 750.ms).slideY(begin: 0.1, end: 0),
 
                 const SizedBox(height: 32),
 
@@ -312,8 +304,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => const SignupScreen(),
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => const SignupScreen(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOutCubic;
+                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+                              return SlideTransition(position: offsetAnimation, child: FadeTransition(opacity: animation, child: child));
+                            },
+                            transitionDuration: const Duration(milliseconds: 400),
                           ),
                         );
                       },
@@ -323,15 +324,81 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           color: AppTheme.secondaryGold,
                           fontWeight: FontWeight.w600,
                         ),
-                      ),
+                      ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+                          .shimmer(delay: 3000.ms, duration: 1500.ms, color: AppTheme.primaryGold.withOpacity(0.3)),
                     ),
                   ],
-                ),
+                ).animate().fadeIn(delay: 800.ms),
 
                 const SizedBox(height: 40),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// Reusable animated button wrapper
+class _AnimatedButton extends StatefulWidget {
+  final Widget child;
+
+  const _AnimatedButton({required this.child});
+
+  @override
+  State<_AnimatedButton> createState() => _AnimatedButtonState();
+}
+
+class _AnimatedButtonState extends State<_AnimatedButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: (_) => setState(() => _isPressed = true),
+      onPointerUp: (_) => setState(() => _isPressed = false),
+      onPointerCancel: (_) => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.97 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+// Animated icon button
+class _AnimatedIconButton extends StatefulWidget {
+  final Widget icon;
+  final VoidCallback onPressed;
+
+  const _AnimatedIconButton({required this.icon, required this.onPressed});
+
+  @override
+  State<_AnimatedIconButton> createState() => _AnimatedIconButtonState();
+}
+
+class _AnimatedIconButtonState extends State<_AnimatedIconButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onPressed();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.85 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        child: IconButton(
+          icon: widget.icon,
+          onPressed: widget.onPressed,
         ),
       ),
     );

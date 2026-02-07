@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
 import 'login_screen.dart';
 
@@ -12,127 +13,112 @@ class SplashScreen extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.textWhite,
+      backgroundColor:
+      isDark ? AppTheme.darkBackground : AppTheme.textWhite,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              const SizedBox(height: 20),
+
+              // 🔹 Logo + Text
+              // 🔹 Logo
+              Image.asset(
+                'assets/logo.png',
+                width: 48,
+                height: 48,
+                fit: BoxFit.contain,
+              )
+                  .animate().fadeIn(duration: 500.ms).scale(delay: 100.ms),
+
+
+              const SizedBox(height: 30),
+
+              // 🔹 Illustration
+              Center(
+                child: Image.asset(
+                  'assets/image.png', // <-- your main image
+                  width: size.width * 0.85,
+                  fit: BoxFit.contain,
                 ),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 24),
+              ).animate().fadeIn(delay: 300.ms, duration: 600.ms),
 
-                        // Logo at top left with DayTask text BELOW it
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Placeholder logo - user will replace with actual image
-                            Container(
-                              width: 48,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.task_alt,
-                                  color: AppTheme.primaryGold,
-                                  size: 32,
-                                ),
-                              ),
+              const Spacer(),
+
+              // 🔹 Heading Text
+              RichText(
+                text: TextSpan(
+                  style: theme.textTheme.headlineLarge?.copyWith(
+                    fontSize: 50,
+                    fontWeight: FontWeight.w500,
+                    height: 1.1,
+                    color: isDark
+                        ? AppTheme.textWhite
+                        : AppTheme.pureBlack,
+                  ),
+                  children: [
+                    const TextSpan(text: "Manage\nyour\nTask with\n"),
+                    TextSpan(
+                      text: "DayTask",
+                      style: TextStyle(
+                        fontFamily: 'Pilat',
+                        fontSize: 56,
+                        fontWeight: FontWeight.w500,
+                        height: 1.0,
+                        color: AppTheme.primaryGold,
+                      ),
+                    ),
+                  ],
+                ),
+              ).animate().fadeIn(delay: 500.ms).slideY(begin: 0.2),
+
+              const SizedBox(height: 30),
+
+              // 🔹 Button
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) =>
+                        const LoginScreen(),
+                        transitionsBuilder:
+                            (_, animation, __, child) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(1, 0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: child,
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              "DayTask",
-                              style: theme.textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: size.height * 0.04),
-
-                        // Illustration placeholder - user will replace with actual image
-                        Center(
-                          child: Container(
-                            width: size.width * 0.7,
-                            height: size.height * 0.3,
-                            constraints: const BoxConstraints(
-                              maxHeight: 350,
-                              maxWidth: 350,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(isDark ? 0.05 : 0.5),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.person_outline,
-                                size: 100,
-                                color: AppTheme.primaryGold.withOpacity(0.3),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const Spacer(),
-
-                        // Main heading with "Manage your Task with DayTask"
-                        // Using Pilat font for this section
-                        RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.headlineLarge?.copyWith(
-                              color: isDark ? AppTheme.textWhite : AppTheme.pureBlack,
-                            ),
-                            children: [
-                              const TextSpan(text: "Manage\nyour\nTask with\n"),
-                              TextSpan(
-                                text: "DayTask",
-                                style: TextStyle(
-                                  color: AppTheme.primaryGold,
-                                  fontFamily: 'Pilat',
-                                  fontSize: 61,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        // Let's Start button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const LoginScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text("Let's Start"),
-                          ),
-                        ),
-
-                        const SizedBox(height: 40),
-                      ],
+                          );
+                        },
+                        transitionDuration:
+                        const Duration(milliseconds: 400),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Let’s Start",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              ).animate().fadeIn(delay: 700.ms),
+
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );

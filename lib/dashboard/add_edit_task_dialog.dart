@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/utils/toast_utils.dart';
 import 'package:task_manager/utils/validators.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
 import '../providers/task_provider.dart';
 import 'task_model.dart';
@@ -92,7 +93,7 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
             Text(
               widget.task == null ? 'Add Task' : 'Edit Task',
               style: theme.textTheme.headlineMedium?.copyWith(fontSize: 22),
-            ),
+            ).animate().fadeIn(duration: 300.ms).slideY(begin: -0.2, end: 0),
             const SizedBox(height: 24),
 
             // Task input field
@@ -107,7 +108,7 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
                 fillColor: isDark ? AppTheme.inputFieldBg : AppTheme.lightBg3,
               ),
               onSubmitted: (_) => _submit(),
-            ),
+            ).animate().fadeIn(delay: 100.ms, duration: 300.ms).slideY(begin: 0.1, end: 0),
 
             const SizedBox(height: 24),
 
@@ -115,34 +116,38 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: _loading ? null : () => Navigator.of(context).pop(),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: isDark ? AppTheme.textLightGray : const Color(0xFFCCCCCC),
+                  child: _AnimatedButton(
+                    child: OutlinedButton(
+                      onPressed: _loading ? null : () => Navigator.of(context).pop(),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: isDark ? AppTheme.textLightGray : const Color(0xFFCCCCCC),
+                        ),
                       ),
+                      child: const Text('Cancel'),
                     ),
-                    child: const Text('Cancel'),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: _loading ? null : _submit,
-                    child: _loading
-                        ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppTheme.pureBlack),
-                      ),
-                    )
-                        : Text(widget.task == null ? 'Add' : 'Update'),
+                  child: _AnimatedButton(
+                    child: ElevatedButton(
+                      onPressed: _loading ? null : _submit,
+                      child: _loading
+                          ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.pureBlack),
+                        ),
+                      )
+                          : Text(widget.task == null ? 'Add' : 'Update'),
+                    ),
                   ),
                 ),
               ],
-            ),
+            ).animate().fadeIn(delay: 200.ms, duration: 300.ms).slideY(begin: 0.2, end: 0),
           ],
         ),
       ),
@@ -155,6 +160,39 @@ void showAddEditTaskDialog(BuildContext context, {Task? task}) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
+    transitionAnimationController: AnimationController(
+      vsync: Navigator.of(context),
+      duration: const Duration(milliseconds: 400),
+    ),
     builder: (context) => AddEditTaskDialog(task: task),
   );
+}
+
+// Animated Button Wrapper
+class _AnimatedButton extends StatefulWidget {
+  final Widget child;
+
+  const _AnimatedButton({required this.child});
+
+  @override
+  State<_AnimatedButton> createState() => _AnimatedButtonState();
+}
+
+class _AnimatedButtonState extends State<_AnimatedButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: (_) => setState(() => _isPressed = true),
+      onPointerUp: (_) => setState(() => _isPressed = false),
+      onPointerCancel: (_) => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.97 : 1.0,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+        child: widget.child,
+      ),
+    );
+  }
 }

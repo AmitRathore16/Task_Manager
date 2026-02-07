@@ -3,16 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_manager/app/theme_provider.dart';
 import 'package:task_manager/auth/splash_screen.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app/theme.dart';
 import 'dashboard/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load();
+
+  final supabaseUrl = dotenv.get('SUPABASE_URL');
+  final supabaseAnonKey = dotenv.get('SUPABASE_ANON_KEY');
+
   await Supabase.initialize(
-    url: 'https://ysjkizxxhpkjzuqwrwqv.supabase.co',
-    anonKey: 'sb_publishable_Ac6m1pEc7q-sGK12R4C15w_9q2S-iCW',
+    url: supabaseUrl,
+    anonKey: supabaseAnonKey,
   );
 
   runApp(const ProviderScope(child: MyApp()));
