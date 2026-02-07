@@ -415,7 +415,7 @@ class _AnimatedThemeToggleState extends State<_AnimatedThemeToggle> with SingleT
             borderRadius: BorderRadius.circular(12),
           ),
           child: RotationTransition(
-            turns: Tween<double>(begin: 0, end: 0.5).animate(
+            turns: Tween<double>(begin: 0, end: 1).animate(
               CurvedAnimation(parent: _rotationController, curve: Curves.easeInOut),
             ),
             child: Icon(
