@@ -13,6 +13,8 @@ class AuthService {
       email: email,
       password: password,
     );
+    print("Response: $res");
+
     return res.user?.id;
   }
 

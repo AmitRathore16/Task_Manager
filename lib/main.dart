@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:task_manager/app/theme_provider.dart';
 import 'package:task_manager/auth/splash_screen.dart';
 
 import 'app/theme.dart';
@@ -27,14 +28,15 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      themeMode: themeMode,
       home: authState.when(
-        data: (_) {
+        data: (authStateData) {
           final session = Supabase.instance.client.auth.currentSession;
 
           if (session != null) {

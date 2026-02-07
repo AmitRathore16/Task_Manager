@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:task_manager/dashboard/dashboard_screen.dart';
 import '../app/theme.dart';
 import 'auth_service.dart';
 import 'signup_screen.dart';
@@ -38,13 +40,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
-      // No Navigator push needed — auth listener in main.dart handles redirect
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const DashboardScreen(),
+          ),
+        );
+      }
+
+    } on AuthException catch (e) {
+      setState(() => _error = e.message);
     } catch (e) {
       setState(() => _error = e.toString());
     }
 
     setState(() => _loading = false);
   }
+
 
   @override
   Widget build(BuildContext context) {
