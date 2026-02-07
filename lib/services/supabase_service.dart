@@ -4,10 +4,8 @@ import '../dashboard/task_model.dart';
 class SupabaseService {
   final _client = Supabase.instance.client;
 
-  // Get current user ID
   String? get currentUserId => _client.auth.currentUser?.id;
 
-  // Fetch all tasks for current user
   Future<List<Task>> fetchTasks() async {
     final user = _client.auth.currentUser;
 
@@ -25,7 +23,6 @@ class SupabaseService {
   }
 
 
-  // Add a new task
   Future<void> addTask(String title) async {
     final user = _client.auth.currentUser;
 
@@ -39,7 +36,6 @@ class SupabaseService {
   }
 
 
-  // Update task (mark as completed or edit title)
   Future<Task> updateTask(String taskId, {String? title, bool? isCompleted}) async {
     try {
       final updateData = <String, dynamic>{};
@@ -59,7 +55,6 @@ class SupabaseService {
     }
   }
 
-  // Delete task
   Future<void> deleteTask(String taskId) async {
     try {
       await _client.from('tasks').delete().eq('id', taskId);

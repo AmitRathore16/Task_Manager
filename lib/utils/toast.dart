@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-/// Toast utility for showing beautiful notifications throughout the app
-
 class ToastUtils {
-  // Private constructor to prevent instantiation
   ToastUtils._();
 
   static final FToast _fToast = FToast();
 
-  /// Show success toast (green)
   static void showSuccess(BuildContext context, String message) {
     _fToast.init(context);
     _fToast.showToast(
@@ -24,7 +20,6 @@ class ToastUtils {
     );
   }
 
-  /// Show error toast (red)
   static void showError(BuildContext context, String message) {
     _fToast.init(context);
     _fToast.showToast(
@@ -39,7 +34,6 @@ class ToastUtils {
     );
   }
 
-  /// Show info toast (blue)
   static void showInfo(BuildContext context, String message) {
     _fToast.init(context);
     _fToast.showToast(
@@ -54,7 +48,6 @@ class ToastUtils {
     );
   }
 
-  /// Show warning toast (orange)
   static void showWarning(BuildContext context, String message) {
     _fToast.init(context);
     _fToast.showToast(
@@ -69,7 +62,6 @@ class ToastUtils {
     );
   }
 
-  /// Build custom toast container widget
   static Widget _buildToastContainer({
     required String message,
     required IconData icon,
@@ -116,7 +108,6 @@ class ToastUtils {
     );
   }
 
-  /// Cancel all active toasts
   static void cancelAllToasts() {
     _fToast.removeCustomToast();
   }

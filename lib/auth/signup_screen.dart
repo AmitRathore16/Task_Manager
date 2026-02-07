@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/utils/toast_utils.dart';
+import 'package:task_manager/utils/toast.dart';
 import 'package:task_manager/utils/validators.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
-import 'auth_service.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -37,7 +36,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       return;
     }
 
-    // Validate form
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -82,7 +80,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               children: [
                 SizedBox(height: size.height * 0.06),
 
-                // Logo placeholder - user will replace with actual image
                 Image.asset(
                   'assets/logo.png',
                   width: 85,
@@ -94,7 +91,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 40),
 
-                // Create your account heading
                 Text(
                   "Create your account",
                   style: theme.textTheme.headlineMedium,
@@ -102,7 +98,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 40),
 
-                // Full Name label
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -114,7 +109,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ).animate().fadeIn(delay: 400.ms),
                 const SizedBox(height: 8),
 
-                // Full Name input field with icon
                 TextFormField(
                   controller: _fullNameController,
                   keyboardType: TextInputType.name,
@@ -134,7 +128,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 24),
 
-                // Email Address label
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -146,7 +139,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ).animate().fadeIn(delay: 500.ms),
                 const SizedBox(height: 8),
 
-                // Email input field with icon
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -165,7 +157,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 24),
 
-                // Password label
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -177,7 +168,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ).animate().fadeIn(delay: 600.ms),
                 const SizedBox(height: 8),
 
-                // Password input field with icon and visibility toggle
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
@@ -207,7 +197,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 24),
 
-                // Terms and Conditions checkbox
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -255,8 +244,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 32),
 
-
-                // Sign Up button with animation
                 _AnimatedButton(
                   child: SizedBox(
                     width: double.infinity,
@@ -280,7 +267,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 32),
 
-                // "Or continue with" divider
                 Row(
                   children: [
                     Expanded(
@@ -309,7 +295,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 32),
 
-                // Google sign-in button
                 _AnimatedButton(
                   child: SizedBox(
                     width: double.infinity,
@@ -341,7 +326,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 const SizedBox(height: 32),
 
-                // Log in link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -377,7 +361,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 }
 
-// Reusable animated button wrapper
 class _AnimatedButton extends StatefulWidget {
   final Widget child;
 
@@ -406,7 +389,6 @@ class _AnimatedButtonState extends State<_AnimatedButton> {
   }
 }
 
-// Animated checkbox
 class _AnimatedCheckbox extends StatefulWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;
@@ -447,7 +429,6 @@ class _AnimatedCheckboxState extends State<_AnimatedCheckbox> {
   }
 }
 
-// Animated icon button
 class _AnimatedIconButton extends StatefulWidget {
   final Widget icon;
   final VoidCallback onPressed;

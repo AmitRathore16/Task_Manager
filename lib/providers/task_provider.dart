@@ -3,12 +3,10 @@ import 'package:task_manager/dashboard/task_model.dart';
 import '../main.dart';
 import '../services/supabase_service.dart';
 
-// Supabase service provider
 final supabaseServiceProvider = Provider<SupabaseService>((ref) {
   return SupabaseService();
 });
 
-// Task list provider with real-time updates
 final taskListProvider = FutureProvider<List<Task>>((ref) async {
   final authState = ref.watch(authStateProvider);
 
@@ -19,12 +17,6 @@ final taskListProvider = FutureProvider<List<Task>>((ref) async {
   return supabaseService.fetchTasks();
 });
 
-
-
-
-
-
-// Task operations provider
 final taskOperationsProvider = Provider<TaskOperations>((ref) {
   final supabaseService = ref.watch(supabaseServiceProvider);
   return TaskOperations(ref, supabaseService);

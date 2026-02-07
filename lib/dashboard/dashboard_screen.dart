@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_manager/app/theme_provider.dart';
-import 'package:task_manager/auth/splash_screen.dart';
+import 'package:task_manager/splash_screen.dart';
 import 'package:task_manager/providers/task_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
 import '../auth/auth_service.dart';
-import 'task_model.dart';
 import 'task_tile.dart';
-import 'add_edit_task_dialog.dart';
+import 'edit_task_dialog.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -53,10 +52,8 @@ class DashboardScreen extends ConsumerWidget {
                           ).animate().fadeIn(delay: 100.ms, duration: 400.ms).slideX(begin: -0.2, end: 0),
                         ],
                       ),
-                      // Theme toggle and Profile icon
                       Row(
                         children: [
-                          // Night mode toggle button with animation
                           _AnimatedThemeToggle(
                             isDark: isDark,
                             onTap: () {
@@ -64,7 +61,6 @@ class DashboardScreen extends ConsumerWidget {
                             },
                           ).animate().fadeIn(delay: 200.ms, duration: 400.ms).scale(delay: 200.ms),
                           const SizedBox(width: 12),
-                          // Profile icon with animation
                           _AnimatedIconContainer(
                             onTap: () async {
                               final confirm = await showDialog<bool>(
@@ -122,7 +118,6 @@ class DashboardScreen extends ConsumerWidget {
                     ],
                   ),                  const SizedBox(height: 20),
 
-                  // Search bar and filter (dummy - no functionality)
                   Row(
                     children: [
                       Expanded(
@@ -160,7 +155,6 @@ class DashboardScreen extends ConsumerWidget {
                         ).animate().fadeIn(delay: 400.ms, duration: 400.ms).slideX(begin: -0.1, end: 0),
                       ),
                       const SizedBox(width: 12),
-                      // Filter button (dummy) with animation
                       _AnimatedIconContainer(
                         onTap: () {},
                         child: Container(
@@ -228,7 +222,6 @@ class DashboardScreen extends ConsumerWidget {
                   return ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
-                      // Pending tasks section
                       if (pendingTasks.isNotEmpty) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,7 +252,6 @@ class DashboardScreen extends ConsumerWidget {
                           ],
                         ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1, end: 0),
                         const SizedBox(height: 16),
-                        // Staggered animation for task items
                         ...pendingTasks.asMap().entries.map((entry) {
                           final index = entry.key;
                           final task = entry.value;
@@ -271,7 +263,6 @@ class DashboardScreen extends ConsumerWidget {
                         const SizedBox(height: 24),
                       ],
 
-                      // Completed tasks section
                       if (completedTasks.isNotEmpty) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,7 +300,6 @@ class DashboardScreen extends ConsumerWidget {
                           ],
                         ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1, end: 0),
                         const SizedBox(height: 16),
-                        // Staggered animation for completed task items
                         ...completedTasks.asMap().entries.map((entry) {
                           final index = entry.key;
                           final task = entry.value;
@@ -365,7 +355,6 @@ class DashboardScreen extends ConsumerWidget {
   }
 }
 
-// Animated Theme Toggle Button
 class _AnimatedThemeToggle extends StatefulWidget {
   final bool isDark;
   final VoidCallback onTap;
@@ -443,7 +432,6 @@ class _AnimatedThemeToggleState extends State<_AnimatedThemeToggle> with SingleT
   }
 }
 
-// Animated Icon Container (for Profile and Filter buttons)
 class _AnimatedIconContainer extends StatefulWidget {
   final VoidCallback onTap;
   final Widget child;
@@ -476,7 +464,6 @@ class _AnimatedIconContainerState extends State<_AnimatedIconContainer> {
   }
 }
 
-// Animated FAB
 class _AnimatedFAB extends StatefulWidget {
   final VoidCallback onPressed;
 

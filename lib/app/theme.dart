@@ -6,25 +6,19 @@ class AppTheme {
   static const Color primaryGold = Color(0xFFBC9434);
   static const Color secondaryGold = Color(0xFFFED36A);
   static const Color darkBackground = Color(0xFF263238);
-  static const Color darkerBackground = Color(0xFF212832);
   static const Color inputFieldBg = Color(0xFF455A64);
   static const Color inputFieldBgDark = Color(0xFF3A3E47);
   static const Color textWhite = Color(0xFFFFFFFF);
   static const Color textLightGray = Color(0xFFE0E0E0);
   static const Color textMutedGray = Color(0xFF999999);
   static const Color dividerColor = Color(0xFF3A3E47);
-  static const Color coralOrange = Color(0xFFEB996E);
-  static const Color lightCoralOrange = Color(0xFFFFBE9D);
-  static const Color lightBg = Color(0xFFF5F5F5);
   static const Color lightBg2 = Color(0xFFFAFAFA);
   static const Color lightBg3 = Color(0xFFEBEBEB);
   static const Color lightBg4 = Color(0xFFE0E0E0);
   static const Color pureBlack = Color(0xFF000000);
 
-  // 🔤 Typography using Inter and Pilat fonts
   static TextTheme _buildTextTheme(ColorScheme colorScheme) {
     final baseTextTheme = GoogleFonts.interTextTheme();
-
     return baseTextTheme.copyWith(
       // Large heading for "Manage your Task with DayTask" - Uses Pilat Demi 61px
       headlineLarge: const TextStyle(
@@ -88,7 +82,7 @@ class AppTheme {
       primary: primaryGold,
       secondary: secondaryGold,
       surface: darkBackground,
-      background: darkerBackground,
+      background: darkBackground,
       onPrimary: pureBlack,
       onSecondary: pureBlack,
       onSurface: textWhite,

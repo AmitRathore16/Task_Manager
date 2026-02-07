@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_manager/providers/task_provider.dart';
-import 'package:task_manager/utils/toast_utils.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:task_manager/utils/toast.dart';
 import '../app/theme.dart';
 import 'task_model.dart';
-import 'add_edit_task_dialog.dart';
+import 'edit_task_dialog.dart';
 
 class TaskTile extends ConsumerWidget {
   final Task task;
@@ -19,7 +18,7 @@ class TaskTile extends ConsumerWidget {
     final taskOps = ref.read(taskOperationsProvider);
 
     return Dismissible(
-      key: ValueKey(task.id), // IMPORTANT
+      key: ValueKey(task.id),
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
@@ -35,7 +34,6 @@ class TaskTile extends ConsumerWidget {
         ),
       ),
 
-      /// Handle deletion safely BEFORE animation
       confirmDismiss: (direction) async {
         final confirm = await showDialog<bool>(
           context: context,
@@ -72,7 +70,7 @@ class TaskTile extends ConsumerWidget {
               ToastUtils.showSuccess(context, 'Task deleted successfully');
             }
 
-            return true; // allow animation
+            return true;
           } catch (e) {
             if (context.mounted) {
               ToastUtils.showError(context, 'Error deleting task: ${e.toString()}');
@@ -97,7 +95,6 @@ class TaskTile extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            /// Animated Checkbox
             _AnimatedCheckbox(
               isCompleted: task.isCompleted,
               isDark: isDark,
@@ -120,7 +117,6 @@ class TaskTile extends ConsumerWidget {
 
             const SizedBox(width: 12),
 
-            /// Task Title
             Expanded(
               child: Text(
                 task.title,
@@ -139,7 +135,6 @@ class TaskTile extends ConsumerWidget {
               ),
             ),
 
-            /// Animated Edit Button
             _AnimatedEditButton(
               isDark: isDark,
               onPressed: () {
@@ -153,7 +148,6 @@ class TaskTile extends ConsumerWidget {
   }
 }
 
-// Animated Checkbox with completion animation
 class _AnimatedCheckbox extends StatefulWidget {
   final bool isCompleted;
   final bool isDark;
@@ -259,7 +253,6 @@ class _AnimatedCheckboxState extends State<_AnimatedCheckbox> with SingleTickerP
   }
 }
 
-// Animated Edit Button
 class _AnimatedEditButton extends StatefulWidget {
   final bool isDark;
   final VoidCallback onPressed;

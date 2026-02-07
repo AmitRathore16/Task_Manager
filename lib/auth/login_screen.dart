@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:task_manager/dashboard/dashboard_screen.dart';
-import 'package:task_manager/utils/toast_utils.dart';
+import 'package:task_manager/utils/toast.dart';
 import 'package:task_manager/utils/validators.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
@@ -90,7 +90,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 SizedBox(height: size.height * 0.06),
 
-                // Logo placeholder - user will replace with actual image
                 Image.asset(
                   'assets/logo.png',
                   width: 85,
@@ -102,7 +101,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 40),
 
-                // Welcome Back heading
                 Text(
                   "Welcome Back!",
                   style: theme.textTheme.headlineMedium,
@@ -110,7 +108,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 40),
 
-                // Email Address label
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -122,7 +119,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ).animate().fadeIn(delay: 400.ms),
                 const SizedBox(height: 8),
 
-                // Email input field with icon
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -141,7 +137,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 24),
 
-                // Password label
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -153,7 +148,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ).animate().fadeIn(delay: 500.ms),
                 const SizedBox(height: 8),
 
-                // Password input field with icon and visibility toggle
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
@@ -183,7 +177,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 16),
 
-                // Forgot Password link
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -205,7 +198,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 24),
 
 
-                // Log In button with animation
                 _AnimatedButton(
                   child: SizedBox(
                     width: double.infinity,
@@ -229,7 +221,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 32),
 
-                // "Or continue with" divider
                 Row(
                   children: [
                     Expanded(
@@ -258,7 +249,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 32),
 
-                // Google sign-in button
                 _AnimatedButton(
                   child: SizedBox(
                     width: double.infinity,
@@ -269,7 +259,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Google icon placeholder
                           Icon(
                             Icons.g_mobiledata,
                             size: 28,
@@ -290,7 +279,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 const SizedBox(height: 32),
 
-                // Sign up link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -340,7 +328,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 }
 
-// Reusable animated button wrapper
 class _AnimatedButton extends StatefulWidget {
   final Widget child;
 
@@ -369,7 +356,6 @@ class _AnimatedButtonState extends State<_AnimatedButton> {
   }
 }
 
-// Animated icon button
 class _AnimatedIconButton extends StatefulWidget {
   final Widget icon;
   final VoidCallback onPressed;

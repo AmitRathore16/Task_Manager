@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:task_manager/utils/toast_utils.dart';
+import 'package:task_manager/utils/toast.dart';
 import 'package:task_manager/utils/validators.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../app/theme.dart';
@@ -8,7 +8,7 @@ import '../providers/task_provider.dart';
 import 'task_model.dart';
 
 class AddEditTaskDialog extends ConsumerStatefulWidget {
-  final Task? task; // null for add, non-null for edit
+  final Task? task;
 
   const AddEditTaskDialog({super.key, this.task});
 
@@ -45,14 +45,12 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
       final taskOps = ref.read(taskOperationsProvider);
 
       if (widget.task == null) {
-        // Add new task
         await taskOps.addTask(_controller.text);
         if (mounted) {
           Navigator.of(context).pop();
           ToastUtils.showSuccess(context, 'Task added successfully!');
         }
       } else {
-        // Edit existing task
         await taskOps.editTask(widget.task!.id, _controller.text);
         if (mounted) {
           Navigator.of(context).pop();
@@ -89,14 +87,12 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title
             Text(
               widget.task == null ? 'Add Task' : 'Edit Task',
               style: theme.textTheme.headlineMedium?.copyWith(fontSize: 22),
             ).animate().fadeIn(duration: 300.ms).slideY(begin: -0.2, end: 0),
             const SizedBox(height: 24),
 
-            // Task input field
             TextField(
               controller: _controller,
               autofocus: true,
@@ -112,7 +108,6 @@ class _AddEditTaskDialogState extends ConsumerState<AddEditTaskDialog> {
 
             const SizedBox(height: 24),
 
-            // Buttons
             Row(
               children: [
                 Expanded(
@@ -168,7 +163,6 @@ void showAddEditTaskDialog(BuildContext context, {Task? task}) {
   );
 }
 
-// Animated Button Wrapper
 class _AnimatedButton extends StatefulWidget {
   final Widget child;
 

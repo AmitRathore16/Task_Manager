@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../app/theme.dart';
-import 'login_screen.dart';
+import 'app/theme.dart';
+import 'auth/login_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -24,8 +24,6 @@ class SplashScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // 🔹 Logo + Text
-              // 🔹 Logo
               Image.asset(
                 'assets/logo.png',
                 width: 48,
@@ -37,10 +35,9 @@ class SplashScreen extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // 🔹 Illustration
               Center(
                 child: Image.asset(
-                  'assets/image.png', // <-- your main image
+                  'assets/image.png',
                   width: size.width * 0.85,
                   fit: BoxFit.contain,
                 ),
@@ -48,7 +45,6 @@ class SplashScreen extends StatelessWidget {
 
               const Spacer(),
 
-              // 🔹 Heading Text
               RichText(
                 text: TextSpan(
                   style: theme.textTheme.headlineLarge?.copyWith(
@@ -77,7 +73,6 @@ class SplashScreen extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // 🔹 Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
